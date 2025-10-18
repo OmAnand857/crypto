@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "header": "Program Committees",
+      "sections": [
+        {
+          "title": "Program Chairs",
+          "members": [
+            {
+              "name": "Luca de Feo",
+              "affiliation": "IBM Research, Zürich"
+            },
+            {
+              "name": "Ratna Dutta",
+              "affiliation": "IIT Kharagpur, India"
+            }
+          ]
+        },
+        {
+          "title": "Program Committee Members",
+          "members": [
+            {
+              "name": "Aditi Gangopadhyay",
+              "affiliation": "Indian Institute of Technology Roorkee"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "header": "Organizing Committee",
+      "sections": [
+        {
+          "title": "General Chairs",
+          "members": [
+            {
+              "name": "Luca de Feo",
+              "affiliation": "IBM Research, Zürich"
+            },
+            {
+              "name": "Ratna Dutta",
+              "affiliation": "IIT Kharagpur, India"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
