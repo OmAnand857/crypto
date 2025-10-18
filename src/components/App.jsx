@@ -1,47 +1,22 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom';
 import { Calendar, MapPin, Users, Mail, Menu, X, Clock, ChevronDown } from 'lucide-react';
-import HeroCarousel from './HeroCarousel';
 import Marquee from './Marquee';
-const App = () => {
+import HeroCarousel from './HeroCarousel';
+import CommitteePage from './committees';
+
+const Placeholder = ({ title }) => (
+    <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-4xl font-bold">{title} Page - Coming Soon</h1>
+    </div>
+);
+
+const Layout = ({ navItems, stats }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-
-  const navItems = [
-    { label: 'Home', href: '#' },
-    { label: 'Committees', href: '#', hasDropdown: true },
-    { label: 'Speakers', href: '#' },
-    { label: 'General', href: '#', hasDropdown: true },
-    { label: 'Program', href: '#', hasDropdown: true },
-    { label: 'For Authors', href: '#', hasDropdown: true },
-    { label: 'Travel', href: '#', hasDropdown: true },
-    { label: 'Registration', href: '#', hasDropdown: true },
-    { label: 'Sponsors', href: '#' }
-  ];
-
-  const importantDates = [
-    { date: 'September 10, 2025', event: 'Paper submission deadline' },
-    { date: 'October 10, 2025', event: 'Notification to authors' },
-    { date: 'October 15, 2025', event: 'Final manuscript due' },
-    { date: 'December 14-17, 2025', event: 'Date of the conference' }
-  ];
-
-  const stats = [
-    { number: '60', label: 'DAYS' },
-    { number: '1', label: 'HOURS' },
-    { number: '7', label: 'MINUTES' },
-    { number: '46', label: 'SECONDS' }
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* Top Bar */}
-      <Marquee/>
-      {/* <div className="bg-blue-600 text-white text-xs py-2 px-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>Call For Papers: September 10, 2025</div>
-          <div>For any queries, contact: App@iiit-bh.ac.in</div>
-        </div>
-      </div> */}
+    <>
+      {/* Marquee is common */}
+      <Marquee />
 
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -87,15 +62,34 @@ const App = () => {
         <nav className={`bg-blue-600 ${mobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
           <div className="max-w-7xl mx-auto px-4">
             <ul className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-0 lg:gap-1">
-              {navItems.map((item, idx) => (
+               {navItems.map((item, idx) => (
                 <li key={idx} className="relative group">
-                  <a
-                    href={item.href}
-                    className="flex items-center justify-between lg:justify-center gap-2 px-4 py-3 text-white hover:bg-blue-700 transition-colors"
-                  >
-                    {item.label}
-                    {item.hasDropdown && <ChevronDown size={16} />}
-                  </a>
+                  {item.children && item.children.length > 0 ? (
+                    <span className="flex items-center justify-between gap-2 px-4 py-3 text-white cursor-pointer hover:bg-blue-700 transition-colors">
+                      {item.label} <ChevronDown size={16} />
+                    </span>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className="flex items-center justify-center px-4 py-3 text-white hover:bg-blue-700 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                  {item.children && item.children.length > 0 && (
+                    <ul className="absolute left-0 top-full w-56 bg-blue-600 hidden group-hover:block z-10 shadow-lg">
+                      {item.children.map((child, cidx) => (
+                        <li key={cidx}>
+                          <Link 
+                            to={child.path} 
+                            className="block px-4 py-2 text-white hover:bg-blue-700 transition-colors"
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>
@@ -103,6 +97,75 @@ const App = () => {
         </nav>
       </header>
 
+      {/* Main content (rendered via nested routes) */}
+      <main>
+        <Outlet />
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* About */}
+            <div>
+              <h4 className="font-bold text-lg mb-4">Indocrypt 2025</h4>
+              <p className="text-gray-400 text-sm">
+                Premier international conference on cryptography &amp; information security held in India – fostering innovation and collaboration globally.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-bold text-lg mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+                <li><Link to="/speakers" className="text-gray-400 hover:text-white transition-colors">Speakers</Link></li>
+                <li><Link to="/sponsors" className="text-gray-400 hover:text-white transition-colors">Sponsors</Link></li>
+              </ul>
+            </div>
+
+            {/* Contact Us */}
+            <div>
+              <h4 className="font-bold text-lg mb-4">Contact Us</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>Email: App@iiit-bh.ac.in</li>
+                <li>Phone: +XXXXXXXXXXX</li>
+                <li>Location: IIIT Bhubaneswar, Odisha, India</li>
+              </ul>
+            </div>
+
+            {/* Connect With Us */}
+            <div>
+              <h4 className="font-bold text-lg mb-4">Connect With Us</h4>
+              <div className="flex gap-4">
+                <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <span className="font-bold">f</span>
+                </a>
+                <a href="#" className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors">
+                  <span className="font-bold">t</span>
+                </a>
+                <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                  <span className="font-bold">in</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+            <p>© Copyright 2025, All rights reserved.</p>
+            <p className="mt-2">
+              Maintained with 💚 by <span className="text-white font-semibold">CANOPUX</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+};
+
+const Home = ({ importantDates }) => {
+  return (
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <HeroCarousel/>
 
@@ -218,66 +281,144 @@ const App = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* About */}
-            <div>
-              <h4 className="font-bold text-lg mb-4">Indocrypt 2025</h4>
-              <p className="text-gray-400 text-sm">
-                Premier international conference on cryptography & information security held in India – fostering innovation and collaboration globally.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="font-bold text-lg mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Schedule</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Speakers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Register</a></li>
-              </ul>
-            </div>
-
-            {/* Contact Us */}
-            <div>
-              <h4 className="font-bold text-lg mb-4">Contact Us</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>Email: App@iiit-bh.ac.in</li>
-                <li>Phone: +XXXXXXXXXXX</li>
-                <li>Location: IIIT Bhubaneswar, Odisha, India</li>
-              </ul>
-            </div>
-
-            {/* Connect With Us */}
-            <div>
-              <h4 className="font-bold text-lg mb-4">Connect With Us</h4>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                  <span className="font-bold">f</span>
-                </a>
-                <a href="#" className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors">
-                  <span className="font-bold">t</span>
-                </a>
-                <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
-                  <span className="font-bold">in</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>© Copyright 2025, All rights reserved.</p>
-            <p className="mt-2">
-              Maintained with 💚 by <span className="text-white font-semibold">CANOPUX</span>
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
+  );
+};
+
+const App = () => {
+  const navItems = [
+    { label: 'Home', path: '/' },
+    { 
+      label: 'Committees', 
+      // When drop down exists, the parent is not clickable
+      children: [
+        { label: 'Program Committee', path: '/committees/program-committee' },
+        { label: 'General Chairs', path: '/committees/general-chairs' },
+        { label: 'Organizing Committee', path: '/committees/organizing-committee' },
+        { label: 'Advisory Committee', path: '/committees/advisory-committee' },
+        { label: 'Finance and Advisory Committee', path: '/committees/finance-advisory-committee' },
+        { label: 'Publicity Chair', path: '/committees/publicity-chair' },
+        { label: 'Industry Chair', path: '/committees/industry-chair' }
+      ]
+    },
+    { label: 'Speakers', path: '/speakers' },
+    { 
+      label: 'General', 
+      children: [
+        { label: 'Partners', path: '/general/partners' },
+        { label: 'About', path: '/general/about' },
+        { label: 'FAQ', path: '/general/faq' },
+        { label: 'Contact', path: '/general/contact' }
+      ]
+    },
+    { 
+      label: 'Program', 
+      children: [
+        { label: 'Program', path: '/program/program' },
+        { label: 'Past Indocrypt', path: '/program/past-indocrypt' }
+      ]
+    },
+    { 
+      label: 'For Authors', 
+      children: [
+        { label: 'Call for Papers', path: '/for-authors/call-for-papers' },
+        { label: 'Guidelines', path: '/for-authors/guidelines' },
+        { label: 'Paper Submission', path: '/for-authors/paper-submission' },
+        { label: 'Accepted Papers List', path: '/for-authors/accepted-papers' }
+      ]
+    },
+    { 
+      label: 'Travel', 
+      children: [
+        { label: 'Venue', path: '/travel/venue' },
+        { label: 'Accommodation', path: '/travel/accommodation' },
+        { label: 'Visa', path: '/travel/visa' },
+        { label: 'Places of Interest', path: '/travel/places-of-interest' }
+      ]
+    },
+    { 
+      label: 'Registration', 
+      children: [
+        { label: 'Registration Fee Details', path: '/registration/fee-details' },
+        { label: 'Registration For Indian Participants', path: '/registration/indian' },
+        { label: 'Registration For Foreign Participants', path: '/registration/foreign' },
+        { label: 'Code Of Conduct', path: '/registration/code-of-conduct' }
+      ]
+    },
+    { label: 'Sponsors', path: '/sponsors' }
+  ];
+
+  const importantDates = [
+    { date: 'September 10, 2025', event: 'Paper submission deadline' },
+    { date: 'October 10, 2025', event: 'Notification to authors' },
+    { date: 'October 15, 2025', event: 'Final manuscript due' },
+    { date: 'December 14-17, 2025', event: 'Date of the conference' }
+  ];
+
+  const stats = [
+    { number: '60', label: 'DAYS' },
+    { number: '1', label: 'HOURS' },
+    { number: '7', label: 'MINUTES' },
+    { number: '46', label: 'SECONDS' }
+  ];
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout navItems={navItems} stats={stats} />}>
+          <Route index element={<Home importantDates={importantDates} />} />
+
+          {/* Committees routes */}
+          <Route path="committees" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/program-committee" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/general-chairs" element={<CommitteePage pageIndex={1} />} />
+          <Route path="committees/organizing-committee" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/advisory-committee" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/finance-advisory-committee" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/publicity-chair" element={<CommitteePage pageIndex={0} />} />
+          <Route path="committees/industry-chair" element={<CommitteePage pageIndex={0} />} />
+
+          {/* Speakers */}
+          <Route path="speakers" element={<Placeholder title="Speakers" />} />
+
+          {/* General routes */}
+          <Route path="general" element={<Placeholder title="General" />} />
+          <Route path="general/partners" element={<Placeholder title="Partners" />} />
+          <Route path="general/about" element={<Placeholder title="About" />} />
+          <Route path="general/faq" element={<Placeholder title="FAQ" />} />
+          <Route path="general/contact" element={<Placeholder title="Contact" />} />
+
+          {/* Program routes */}
+          <Route path="program" element={<Placeholder title="Program" />} />
+          <Route path="program/program" element={<Placeholder title="Program" />} />
+          <Route path="program/past-indocrypt" element={<Placeholder title="Past Indocrypt" />} />
+
+          {/* For Authors routes */}
+          <Route path="for-authors" element={<Placeholder title="For Authors" />} />
+          <Route path="for-authors/call-for-papers" element={<Placeholder title="Call for Papers" />} />
+          <Route path="for-authors/guidelines" element={<Placeholder title="Guidelines" />} />
+          <Route path="for-authors/paper-submission" element={<Placeholder title="Paper Submission" />} />
+          <Route path="for-authors/accepted-papers" element={<Placeholder title="Accepted Papers List" />} />
+
+          {/* Travel routes */}
+          <Route path="travel" element={<Placeholder title="Travel" />} />
+          <Route path="travel/venue" element={<Placeholder title="Venue" />} />
+          <Route path="travel/accommodation" element={<Placeholder title="Accommodation" />} />
+          <Route path="travel/visa" element={<Placeholder title="Visa" />} />
+          <Route path="travel/places-of-interest" element={<Placeholder title="Places of Interest" />} />
+
+          {/* Registration routes */}
+          <Route path="registration" element={<Placeholder title="Registration" />} />
+          <Route path="registration/fee-details" element={<Placeholder title="Registration Fee Details" />} />
+          <Route path="registration/indian" element={<Placeholder title="Registration For Indian Participants" />} />
+          <Route path="registration/foreign" element={<Placeholder title="Registration For Foreign Participants" />} />
+          <Route path="registration/code-of-conduct" element={<Placeholder title="Code Of Conduct" />} />
+
+          {/* Sponsors */}
+          <Route path="sponsors" element={<Placeholder title="Sponsors" />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

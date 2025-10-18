@@ -1,61 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { User } from 'lucide-react';
 
+import committeeData from '../data/committees.json';
+
+
+
 const CommitteePage = ({ pageIndex = 0 }) => {
-  const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Fetch the JSON data
-    const fetchData = async () => {
-      try {
-        const response = await window.fs.readFile('../data/committees.json', { encoding: 'utf8' });
-        const jsonData = JSON.parse(response);
-        
-        // Get the specific page by index
-        if (jsonData.data && jsonData.data[pageIndex]) {
-          setPageData(jsonData.data[pageIndex]);
-        } else {
-          setError(`Page at index ${pageIndex} not found`);
-        }
-      } catch (err) {
-        console.error('Error loading data:', err);
-        setError('Failed to load committee data');
-        
-        // Fallback to sample data for demonstration
-        const sampleData = {
-          header: "Program Committees",
-          sections: [
-            {
-              title: "Program Chairs",
-              members: [
-                { name: "Luca de Feo", affiliation: "IBM Research, Zürich" },
-                { name: "Ratna Dutta", affiliation: "IIT Kharagpur, India" },
-                { name: "Sugata Gangopadhyay", affiliation: "IIT Roorkee" }
-              ]
-            },
-            {
-              title: "Program Committee Members",
-              members: [
-                { name: "Aditi Gangopadhyay", affiliation: "Indian Institute of Technology Roorkee" },
-                { name: "Ajith Suresh", affiliation: "Technology Innovation Institute (TII), UAE" },
-                { name: "Ana Salageon", affiliation: "Loughborough University, UK" },
-                { name: "Andre Esser", affiliation: "Cryptography Research Center, Technology Innovation Institute, Abu Dhabi, UAE" },
-                { name: "Anubhab Baksi", affiliation: "Lund University, Sweden" },
-                { name: "Anupam Chattopadhyay", affiliation: "Nanyang Technological University, Singapore" }
-              ]
-            }
-          ]
-        };
-        setPageData(sampleData);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [pageIndex]);
+  // Get the specific page by index
+  const pageData = committeeData.data[pageIndex];
 
   // Reusable PersonCard component
   const PersonCard = ({ person }) => (
@@ -70,18 +22,11 @@ const CommitteePage = ({ pageIndex = 0 }) => {
     </div>
   );
 
-  if (loading) {
+  // Handle case where page doesn't exist
+  if (!pageData) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error && !pageData) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-xl text-red-600">{error}</div>
+        <div className="text-xl text-red-600">Page at index {pageIndex} not found</div>
       </div>
     );
   }
