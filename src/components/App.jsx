@@ -4,6 +4,11 @@ import { Calendar, MapPin, Users, Mail, Menu, X, Clock, ChevronDown } from 'luci
 import Marquee from './Marquee';
 import HeroCarousel from './HeroCarousel';
 import CommitteePage from './committees';
+import CallForPapers from './for_authors/CallForPapers';
+import Guidelines from './for_authors/Guidelines';
+import PaperSubmission from './for_authors/PaperSubmission';
+import AcceptedPapers from './for_authors/AcceptedPapers';
+import Registration from './for_authors/Registration';
 
 const Placeholder = ({ title }) => (
     <div className="min-h-screen flex items-center justify-center">
@@ -324,7 +329,8 @@ const App = () => {
         { label: 'Call for Papers', path: '/for-authors/call-for-papers' },
         { label: 'Guidelines', path: '/for-authors/guidelines' },
         { label: 'Paper Submission', path: '/for-authors/paper-submission' },
-        { label: 'Accepted Papers List', path: '/for-authors/accepted-papers' }
+        { label: 'Accepted Papers List', path: '/for-authors/accepted-papers' },
+        { label: 'Registration', path: '/for-authors/registration' }
       ]
     },
     { 
@@ -395,10 +401,11 @@ const App = () => {
 
           {/* For Authors routes */}
           <Route path="for-authors" element={<Placeholder title="For Authors" />} />
-          <Route path="for-authors/call-for-papers" element={<Placeholder title="Call for Papers" />} />
-          <Route path="for-authors/guidelines" element={<Placeholder title="Guidelines" />} />
-          <Route path="for-authors/paper-submission" element={<Placeholder title="Paper Submission" />} />
-          <Route path="for-authors/accepted-papers" element={<Placeholder title="Accepted Papers List" />} />
+          <Route path="for-authors/call-for-papers" element={<CallForPapers/>} />
+          <Route path="for-authors/guidelines" element={<Guidelines/>} />
+          <Route path="for-authors/paper-submission" element={<PaperSubmission/>} />
+          <Route path="for-authors/accepted-papers" element={<AcceptedPapers/>} />
+          <Route path="for-authors/registration" element={<Registration/>} />
 
           {/* Travel routes */}
           <Route path="travel" element={<Placeholder title="Travel" />} />
