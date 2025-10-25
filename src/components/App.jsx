@@ -10,6 +10,25 @@ import PaperSubmission from './for_authors/PaperSubmission';
 import AcceptedPapers from './for_authors/AcceptedPapers';
 import Registration from './for_authors/Registration';
 
+import IndocryptSpeakers from './speakers/speakers';
+
+import PartnersPage from './general/partners';
+import AboutIndocrypt from './general/about';
+import FAQComponent from './general/faq';
+import ContactPage from './general/contact';
+
+import ProgramSchedule from './program/program';
+import PastConferences from './program/pastConferences';
+
+import VenuePage from './travel/venue';
+import AccommodationPage from './travel/accommodation';
+import VisaInformationPage from './travel/visa';
+import PlacesOfInterest from './travel/placesOfInterest';
+
+
+import SponsorsPage from './sponsors/sponsors';
+
+
 const Placeholder = ({ title }) => (
     <div className="min-h-screen flex items-center justify-center">
         <h1 className="text-4xl font-bold">{title} Page - Coming Soon</h1>
@@ -385,19 +404,19 @@ const App = () => {
           <Route path="committees/industry-chair" element={<CommitteePage pageIndex={0} />} />
 
           {/* Speakers */}
-          <Route path="speakers" element={<Placeholder title="Speakers" />} />
+          <Route path="speakers" element={< IndocryptSpeakers />} />
 
           {/* General routes */}
           <Route path="general" element={<Placeholder title="General" />} />
-          <Route path="general/partners" element={<Placeholder title="Partners" />} />
-          <Route path="general/about" element={<Placeholder title="About" />} />
-          <Route path="general/faq" element={<Placeholder title="FAQ" />} />
-          <Route path="general/contact" element={<Placeholder title="Contact" />} />
+          <Route path="general/partners" element={<PartnersPage/>} />
+          <Route path="general/about" element={<AboutIndocrypt />} />
+          <Route path="general/faq" element={<FAQComponent/>} />
+          <Route path="general/contact" element={<ContactPage />} />
 
           {/* Program routes */}
           <Route path="program" element={<Placeholder title="Program" />} />
-          <Route path="program/program" element={<Placeholder title="Program" />} />
-          <Route path="program/past-indocrypt" element={<Placeholder title="Past Indocrypt" />} />
+          <Route path="program/program" element={<ProgramSchedule />} />
+          <Route path="program/past-indocrypt" element={<PastConferences />} />
 
           {/* For Authors routes */}
           <Route path="for-authors" element={<Placeholder title="For Authors" />} />
@@ -409,10 +428,10 @@ const App = () => {
 
           {/* Travel routes */}
           <Route path="travel" element={<Placeholder title="Travel" />} />
-          <Route path="travel/venue" element={<Placeholder title="Venue" />} />
-          <Route path="travel/accommodation" element={<Placeholder title="Accommodation" />} />
-          <Route path="travel/visa" element={<Placeholder title="Visa" />} />
-          <Route path="travel/places-of-interest" element={<Placeholder title="Places of Interest" />} />
+          <Route path="travel/venue" element={<VenuePage />} />
+          <Route path="travel/accommodation" element={<AccommodationPage />} />
+          <Route path="travel/visa" element={<VisaInformationPage />} />
+          <Route path="travel/places-of-interest" element={<PlacesOfInterest />} />
 
           {/* Registration routes */}
           <Route path="registration" element={<Placeholder title="Registration" />} />
@@ -422,7 +441,7 @@ const App = () => {
           <Route path="registration/code-of-conduct" element={<Placeholder title="Code Of Conduct" />} />
 
           {/* Sponsors */}
-          <Route path="sponsors" element={<Placeholder title="Sponsors" />} />
+          <Route path="sponsors" element={<SponsorsPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
